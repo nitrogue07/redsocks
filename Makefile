@@ -88,6 +88,7 @@ $(CONF):
 # Dependency on .git is useful to rebuild `version.c' after commit, but it breaks non-git builds.
 gen/version.c: *.c *.h gen/.build
 	$(RM) -f $@.tmp
+		$(RM) -f $@.tmp
 	echo '/* this file is auto-generated during build */' > $@.tmp
 	echo '#include "../version.h"' >> $@.tmp
 	echo 'const char* redsocks_version = ' >> $@.tmp
@@ -95,13 +96,9 @@ gen/version.c: *.c *.h gen/.build
 		echo '"redsocks.git/'`git describe --tags`' $(CRYPTO)"'; \
 		if [ `git status --porcelain | grep -v -c '^??'` != 0 ]; then \
 			echo '"-unclean"'; \
-		fi; \
-		echo '"\\n"'; \
-		echo '"Features: $(FEATURES)"' \
+		fi \
 	else \
 		echo '"redsocks/$(VERSION) $(CRYPTO)"'; \
-		echo '"\\n"'; \
-		echo '"Features: $(FEATURES)"' \
 	fi >> $@.tmp
 	echo ';' >> $@.tmp
 	mv -f $@.tmp $@
